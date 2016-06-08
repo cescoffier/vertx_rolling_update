@@ -42,6 +42,9 @@ public class ServerVerticle extends AbstractVerticle {
        // received by this server, reflect back out browser
        eb.send("browserfeed", message.body());
     });
+
+
+    vertx.deployVerticle(PingHandler.class.getName());
         
   }
 }

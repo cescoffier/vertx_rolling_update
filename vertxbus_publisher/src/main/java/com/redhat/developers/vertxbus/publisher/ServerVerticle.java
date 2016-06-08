@@ -29,20 +29,17 @@ public class ServerVerticle extends AbstractVerticle {
     // the date format instance
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
 
-    vertx.setPeriodic(1000L, t -> {
-      // Create a timestamp string
-      String timestamp = formatter.format(Date.from(Instant.now()));
-      System.out.println(hostname + " sending " + timestamp);
-      eb.send("servertopic1", new JsonObject().put("now", hostname + "*-* " + timestamp));
+    vertx.deployVerticle(HttpPingProbeVerticle.class.getName(), ar -> {
+      vertx.setPeriodic(1000L, t -> {
+        // Create a timestamp string
+        String timestamp = formatter.format(Date.from(Instant.now()));
+        //System.out.println(hostname + " sending " + timestamp);
+        eb.send("servertopic1", new JsonObject().put("now", hostname + "*-* " + timestamp + " V4"));
+      });
+      future.complete();
     });
 
-    vertx.deployVerticle(HttpPingProbeVerticle.class.getName(), done -> {
-      if (done.failed()) {
-        future.fail(done.cause());
-      } else {
-        future.complete();
-      }
-    });
 
   }
+
 }
