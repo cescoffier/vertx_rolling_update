@@ -7,6 +7,7 @@ EXPOSE 8080
 
 ADD target/$JAVA_APP_JAR /app
 
+
 WORKDIR /app/
 ENTRYPOINT ["sh", "-c"]
-CMD ["java -jar $JAVA_APP_JAR -cluster"]
+CMD ["java -jar $JAVA_APP_JAR -cluster -cp ."]
